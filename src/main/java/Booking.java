@@ -12,4 +12,17 @@ public class Booking {
     public String getUserId() { return userId; }
     public String getRoomId() { return roomId; }
     public TimeSlot getSlot() { return slot; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking b = (Booking) o;
+        return userId.equals(b.userId) && roomId.equals(b.roomId) && slot.equals(b.slot);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(userId, roomId, slot);
+    }
 }
