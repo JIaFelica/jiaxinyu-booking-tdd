@@ -38,4 +38,9 @@ public final class TimeSlot {
     public int hashCode() {
         return java.util.Objects.hash(start, end);
     }
+
+    @Override
+    public String toString() {
+        return "TimeSlot[" + start + " - " + end + "]";
+    }
 }
