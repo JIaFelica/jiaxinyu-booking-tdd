@@ -15,13 +15,13 @@ class TimeSlotTest {
         LocalDateTime ten = LocalDateTime.of(2027, 1, 11, 10, 0);
         assertThrows(IllegalArgumentException.class, () -> new TimeSlot(ten, ten));
     }
-        
+
     @Test
     void nullStartIsRejected() {
         LocalDateTime ten = LocalDateTime.of(2027, 1, 11, 10, 0);
         assertThrows(IllegalArgumentException.class, () -> new TimeSlot(null, ten));
     }
-       
+
     @Test
     void nullEndIsRejected() {
         LocalDateTime ten = LocalDateTime.of(2027, 1, 11, 10, 0);
@@ -33,5 +33,13 @@ class TimeSlotTest {
         TimeSlot t = new TimeSlot(LocalDateTime.of(2027, 1, 11, 10, 0),
                                   LocalDateTime.of(2027, 1, 11, 11, 30));
         assertEquals(java.time.Duration.ofMinutes(90), t.duration());
+    }
+
+    @Test
+    void gettersReturnStoredTimes() {
+        TimeSlot t = new TimeSlot(LocalDateTime.of(2027, 1, 11, 10, 0),
+                                  LocalDateTime.of(2027, 1, 11, 11, 0));
+        assertEquals(LocalDateTime.of(2027, 1, 11, 10, 0), t.getStart());
+        assertEquals(LocalDateTime.of(2027, 1, 11, 11, 0), t.getEnd());
     }
 }
