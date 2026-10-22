@@ -16,4 +16,6 @@ public final class TimeSlot {
     }
 
     public Duration duration() { return null; }
+    public LocalDateTime getStart() { return start; }
+    public LocalDateTime getEnd() { return end; }
 }
