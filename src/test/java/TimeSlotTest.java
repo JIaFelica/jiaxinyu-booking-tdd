@@ -27,4 +27,11 @@ class TimeSlotTest {
         LocalDateTime ten = LocalDateTime.of(2027, 1, 11, 10, 0);
         assertThrows(IllegalArgumentException.class, () -> new TimeSlot(ten, null));
     }
+
+    @Test
+    void durationIsComputed() {
+        TimeSlot t = new TimeSlot(LocalDateTime.of(2027, 1, 11, 10, 0),
+                                  LocalDateTime.of(2027, 1, 11, 11, 30));
+        assertEquals(java.time.Duration.ofMinutes(90), t.duration());
+    }
 }
