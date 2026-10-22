@@ -76,4 +76,10 @@ class TimeSlotTest {
     void differentSlotsAreNotEqual() {
         assertNotEquals(slot(10, 11), slot(11, 12));
     }
+
+    @Test
+    void toStringDescribesTheSlot() {
+        TimeSlot t = slot(10, 11);
+        assertEquals("TimeSlot[2027-01-11T10:00 - 2027-01-11T11:00]", t.toString());
+    }
 }
