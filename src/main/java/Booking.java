@@ -9,7 +9,7 @@ public class Booking {
         this.slot = slot;
     }
 
-    public String getUserId() { return null; }
-    public String getRoomId() { return null; }
-    public TimeSlot getSlot() { return null; }
+    public String getUserId() { return userId; }
+    public String getRoomId() { return roomId; }
+    public TimeSlot getSlot() { return slot; }
 }
