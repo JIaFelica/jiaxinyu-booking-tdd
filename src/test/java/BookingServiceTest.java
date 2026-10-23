@@ -75,4 +75,23 @@ class BookingServiceTest {
         assertEquals(new Booking("alice", "R2", slot(10, 11)), bookings.get(0));
         assertEquals(new Booking("alice", "R1", slot(11, 12)), bookings.get(1));
     }
+
+    @Test
+    void bookingExactlyMaxSlotIsAllowed() {
+        Booking booking = service.book("alice", "R1", slot(10, 13));
+        assertEquals(new Booking("alice", "R1", slot(10, 13)), booking);
+    }
+
+    @Test
+    void touchingSlotsOnSameRoomAreAllowed() {
+        service.book("alice", "R1", slot(10, 11));
+        Booking second = service.book("bob", "R1", slot(11, 12));
+        assertEquals(new Booking("bob", "R1", slot(11, 12)), second);
+    }
+
+    @Test
+    void sameUserCannotBookTwoRoomsForSameTime() {
+        service.book("alice", "R1", slot(10, 11));
+        assertThrows(IllegalStateException.class, () -> service.book("alice", "R2", slot(10, 11)));
+    }
 }
