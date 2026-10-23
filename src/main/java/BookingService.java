@@ -29,6 +29,11 @@ public class BookingService {
         if (roomOverlap) {
             throw new IllegalStateException("Room is already booked for this time");
         }
+        boolean userOverlap = bookings.findByUser(userId).stream()
+            .anyMatch(b -> b.getSlot().overlaps(slot));
+        if (userOverlap) {
+            throw new IllegalStateException("User already has a booking at this time");
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
