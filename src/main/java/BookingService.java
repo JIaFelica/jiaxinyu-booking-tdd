@@ -24,6 +24,11 @@ public class BookingService {
         if (slot.duration().compareTo(MAX_SLOT) > 0) {
             throw new IllegalArgumentException("Slot is longer than MAX_SLOT");
         }
+        boolean roomOverlap = bookings.findByRoom(roomId).stream()
+            .anyMatch(b -> b.getSlot().overlaps(slot));
+        if (roomOverlap) {
+            throw new IllegalStateException("Room is already booked for this time");
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
