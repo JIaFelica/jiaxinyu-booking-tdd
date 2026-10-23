@@ -40,7 +40,11 @@ public class BookingService {
     }
 
     public void cancel(String userId, String roomId, TimeSlot slot) {
-        throw new UnsupportedOperationException("TODO: implement using TDD");
+        Booking toCancel = bookings.findByRoom(roomId).stream()
+            .filter(b -> b.getUserId().equals(userId) && b.getSlot().equals(slot))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Booking does not exist"));
+        bookings.delete(toCancel);
     }
 
     public List<Booking> bookingsFor(String userId) {
