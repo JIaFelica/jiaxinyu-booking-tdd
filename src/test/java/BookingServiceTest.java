@@ -66,4 +66,13 @@ class BookingServiceTest {
         Booking again = service.book("alice", "R1", slot(10, 11));
         assertEquals(new Booking("alice", "R1", slot(10, 11)), again);
     }
+
+    @Test
+    void bookingsForAreInStartOrder() {
+        service.book("alice", "R1", slot(11, 12));
+        service.book("alice", "R2", slot(10, 11));
+        List<Booking> bookings = service.bookingsFor("alice");
+        assertEquals(new Booking("alice", "R2", slot(10, 11)), bookings.get(0));
+        assertEquals(new Booking("alice", "R1", slot(11, 12)), bookings.get(1));
+    }
 }
