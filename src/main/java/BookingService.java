@@ -15,7 +15,9 @@ public class BookingService {
     }
 
     public Booking book(String userId, String roomId, TimeSlot slot) {
-        throw new UnsupportedOperationException("TODO: implement using TDD");
+        Booking b = new Booking(userId, roomId, slot);
+        bookings.save(b);
+        return b;
     }
 
     public void cancel(String userId, String roomId, TimeSlot slot) {
