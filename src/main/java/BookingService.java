@@ -18,7 +18,8 @@ public class BookingService {
             new SlotInFuture(clock),
             new WithinMaxSlot(),
             new RoomFree(bookings),
-            new UserFree(bookings)
+            new UserFree(bookings),
+            new MaxActiveBookings(bookings, clock)
         );
     }
 
