@@ -7,19 +7,25 @@ public class BookingService {
     private final IRoomRepository rooms;
     private final IBookingRepository bookings;
     private final Clock clock;
+    private final List<BookingRule> rules;
 
     public BookingService(IRoomRepository rooms, IBookingRepository bookings, Clock clock) {
         this.rooms = rooms;
         this.bookings = bookings;
         this.clock = clock;
+        this.rules = List.of(
+            new RoomMustExist(rooms),
+            new SlotInFuture(clock),
+            new WithinMaxSlot(),
+            new RoomFree(bookings),
+            new UserFree(bookings)
+        );
     }
 
     public Booking book(String userId, String roomId, TimeSlot slot) {
-        checkRoomExists(roomId);
-        checkSlotInFuture(slot);
-        checkSlotLength(slot);
-        checkRoomFree(roomId, slot);
-        checkUserFree(userId, slot);
+        for (BookingRule rule : rules) {
+            rule.check(userId, roomId, slot);
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
@@ -37,39 +43,5 @@ public class BookingService {
         return bookings.findByUser(userId).stream()
             .sorted(Comparator.comparing(b -> b.getSlot().getStart()))
             .toList();
-    }
-
-    private void checkRoomExists(String roomId) {
-        if (rooms.findById(roomId) == null) {
-            throw new IllegalArgumentException("Room does not exist");
-        }
-    }
-
-    private void checkSlotInFuture(TimeSlot slot) {
-        if (!slot.getStart().isAfter(LocalDateTime.now(clock))) {
-            throw new IllegalArgumentException("Slot must be in the future");
-        }
-    }
-
-    private void checkSlotLength(TimeSlot slot) {
-        if (slot.duration().compareTo(MAX_SLOT) > 0) {
-            throw new IllegalArgumentException("Slot is longer than MAX_SLOT");
-        }
-    }
-
-    private void checkRoomFree(String roomId, TimeSlot slot) {
-        boolean roomOverlap = bookings.findByRoom(roomId).stream()
-            .anyMatch(b -> b.getSlot().overlaps(slot));
-        if (roomOverlap) {
-            throw new IllegalStateException("Room is already booked for this time");
-        }
-    }
-
-    private void checkUserFree(String userId, TimeSlot slot) {
-        boolean userOverlap = bookings.findByUser(userId).stream()
-            .anyMatch(b -> b.getSlot().overlaps(slot));
-        if (userOverlap) {
-            throw new IllegalStateException("User already has a booking at this time");
-        }
     }
 }
