@@ -36,4 +36,9 @@ class BookingServiceTest {
     void bookingSlotNotInFutureIsRejected() {
         assertThrows(IllegalArgumentException.class, () -> service.book("alice", "R1", slot(8, 9)));
     }
+
+    @Test
+    void bookingSlotLongerThanMaxSlotIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> service.book("alice", "R1", slot(10, 14)));
+    }
 }
