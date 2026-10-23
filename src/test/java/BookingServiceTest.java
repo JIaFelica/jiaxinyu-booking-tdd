@@ -53,4 +53,9 @@ class BookingServiceTest {
         service.book("alice", "R1", slot(10, 12));
         assertThrows(IllegalStateException.class, () -> service.book("alice", "R2", slot(11, 13)));
     }
+
+    @Test
+    void cancellingNonExistentBookingIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> service.cancel("alice", "R1", slot(10, 11)));
+    }
 }
