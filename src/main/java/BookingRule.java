@@ -49,3 +49,17 @@ class RoomFree implements BookingRule {
         }
     }
 }
+
+class UserFree implements BookingRule {
+    private final IBookingRepository bookings;
+
+    UserFree(IBookingRepository bookings) { this.bookings = bookings; }
+
+    public void check(String userId, String roomId, TimeSlot slot) {
+        boolean userOverlap = bookings.findByUser(userId).stream()
+            .anyMatch(b -> b.getSlot().overlaps(slot));
+        if (userOverlap) {
+            throw new IllegalStateException("User already has a booking at this time");
+        }
+    }
+}
