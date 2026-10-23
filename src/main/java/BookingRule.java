@@ -35,3 +35,17 @@ class WithinMaxSlot implements BookingRule {
         }
     }
 }
+
+class RoomFree implements BookingRule {
+    private final IBookingRepository bookings;
+
+    RoomFree(IBookingRepository bookings) { this.bookings = bookings; }
+
+    public void check(String userId, String roomId, TimeSlot slot) {
+        boolean roomOverlap = bookings.findByRoom(roomId).stream()
+            .anyMatch(b -> b.getSlot().overlaps(slot));
+        if (roomOverlap) {
+            throw new IllegalStateException("Room is already booked for this time");
+        }
+    }
+}
