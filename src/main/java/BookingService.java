@@ -17,6 +17,7 @@ public class BookingService {
             new RoomMustExist(rooms),
             new SlotInFuture(clock),
             new WithinMaxSlot(),
+            new WithinBookingWindow(clock),
             new RoomFree(bookings),
             new UserFree(bookings),
             new MaxActiveBookings(bookings, clock)
