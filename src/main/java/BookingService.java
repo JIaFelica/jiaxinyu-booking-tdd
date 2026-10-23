@@ -18,6 +18,9 @@ public class BookingService {
         if (rooms.findById(roomId) == null) {
             throw new IllegalArgumentException("Room does not exist");
         }
+        if (!slot.getStart().isAfter(LocalDateTime.now(clock))) {
+            throw new IllegalArgumentException("Slot must be in the future");
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
