@@ -1,5 +1,5 @@
 import java.time.*;
-import java.util.List;
+import java.util.*;
 
 public class BookingService {
     public static final Duration MAX_SLOT = Duration.ofHours(3);
@@ -48,6 +48,8 @@ public class BookingService {
     }
 
     public List<Booking> bookingsFor(String userId) {
-        throw new UnsupportedOperationException("TODO: implement using TDD");
+        return bookings.findByUser(userId).stream()
+            .sorted(Comparator.comparing(b -> b.getSlot().getStart()))
+            .toList();
     }
 }
