@@ -27,3 +27,11 @@ class SlotInFuture implements BookingRule {
         }
     }
 }
+
+class WithinMaxSlot implements BookingRule {
+    public void check(String userId, String roomId, TimeSlot slot) {
+        if (slot.duration().compareTo(BookingService.MAX_SLOT) > 0) {
+            throw new IllegalArgumentException("Slot is longer than MAX_SLOT");
+        }
+    }
+}
