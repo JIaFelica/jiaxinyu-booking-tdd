@@ -15,6 +15,9 @@ public class BookingService {
     }
 
     public Booking book(String userId, String roomId, TimeSlot slot) {
+        if (rooms.findById(roomId) == null) {
+            throw new IllegalArgumentException("Room does not exist");
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
