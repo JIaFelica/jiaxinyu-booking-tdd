@@ -21,6 +21,9 @@ public class BookingService {
         if (!slot.getStart().isAfter(LocalDateTime.now(clock))) {
             throw new IllegalArgumentException("Slot must be in the future");
         }
+        if (slot.duration().compareTo(MAX_SLOT) > 0) {
+            throw new IllegalArgumentException("Slot is longer than MAX_SLOT");
+        }
         Booking b = new Booking(userId, roomId, slot);
         bookings.save(b);
         return b;
